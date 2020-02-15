@@ -31,14 +31,14 @@ namespace hw1
             {
                 return "[" + x + "," + y + "]";
             }
-            public static bool operator== (Coordinates obj1, Coordinates obj2)
+            public static bool operator ==(Coordinates obj1, Coordinates obj2)
             {
                 if (obj1.x == obj2.x && obj1.y == obj2.y)
                     return true;
                 return false;
             }
 
-            public static bool operator!= (Coordinates obj1, Coordinates obj2)
+            public static bool operator !=(Coordinates obj1, Coordinates obj2)
             {
                 if (obj1.x != obj2.x && obj1.y != obj2.y)
                     return true;
@@ -73,7 +73,7 @@ namespace hw1
                 coordinates = c.coordinates;
                 property = c.property;
             }
-            
+
             public override string ToString()
             {
                 return property.value.ToString();
@@ -82,38 +82,41 @@ namespace hw1
 
         //Configurations
         public int row, coloumn;
-        public Cell[,] GameBoard; //THE MAIN GAMEBOARD
+        public int[,] GameBoard; //THE MAIN GAMEBOARD
         public int valuetoObtain;
-        public List<int> tilespawnPool;
+        public Queue<int> tilespawnPool;
 
-        public Board(int r, int c, int input_valuetoObtain, List<int> input_pooltoSpawn)
+        //empty gameboard;
+        public Board(int r, int c, int input_valuetoObtain, Queue<int> input_pooltoSpawn)
         {
             row = r;
-            c = c;
+            coloumn = c;
             valuetoObtain = input_valuetoObtain;
             tilespawnPool = input_pooltoSpawn;
         }
         public Board(Board b) //update listings
         {
             row = b.row;
-            coloumn = b.coloumn;            
+            coloumn = b.coloumn;
             valuetoObtain = b.valuetoObtain;
             tilespawnPool = b.tilespawnPool;
+            GameBoard = b.GameBoard;
         }
 
+        //resets Board. fills in with input grid
         public void FillBoard(List<List<int>> input)
         {
-            GameBoard = new Cell[row, coloumn];
+            GameBoard = new int[row, coloumn];
             //fillBoard
             for (int yPos = 0; yPos < row; yPos++)
             {
-                List<int> input_Row= input[yPos];
+                List<int> input_Row = input[yPos];
                 for (int xPos = 0; xPos < coloumn; xPos++)
                 {
                     //make coordinate, put value into property, place into board
-                    Coordinates new_c= new Coordinates(xPos, yPos);
-                    Property new_p= new Property(input_Row[xPos]);
-                    GameBoard[yPos, xPos] = new Cell(new_c, new_p);
+                    //Coordinates new_c = new Coordinates(xPos, yPos);
+                    //Property new_p = new Property(input_Row[xPos]);
+                    GameBoard[yPos, xPos] = input_Row[xPos];
                 }
             }
 
@@ -123,21 +126,265 @@ namespace hw1
         //----debugging methods
         public void DisplayBoard()
         {
-            //displayed inversed since the origin of the array is topleft. switching to bottomleft
-            for (int yPos = row - 1; yPos >= 0; yPos--)
+            for (int yPos = 0; yPos < row; yPos++)
             {
                 for (int xPos = 0; xPos < coloumn; xPos++)
                 {
-                    string displaytext=GameBoard[yPos,xPos].ToString();
+                    string displaytext = GameBoard[yPos, xPos].ToString();
                     Console.Write(displaytext);
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine();            
+            Console.WriteLine();
+        }
+        public void DebugBoard()
+        {
+            Console.WriteLine("in [yPos,xPos] format");
+            for (int yPos = 0; yPos < row; yPos++)
+            {
+                for (int xPos = 0; xPos < coloumn; xPos++)
+                {
+
+                    Console.Write("[" + yPos + "," + xPos + "]");
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine();
+        }
+
+
+
+
+        public void spawn()
+        {
+          //top left > top right > bottom right > bottom left
+          Console.WriteLine("ATTEMPING TO SPAWN: ");
+          bool hasSpawned= false;
+          int yPos =-1;
+          int xPos =-1;
+          int valuetoSpawn;
+          if (GameBoard[0, 0] == 0) //top left
+          {
+            Console.WriteLine("Topleft");
+            hasSpawned=true;
+            yPos=0;
+            xPos=0;
+          }
+          else if (GameBoard[0, 3] == 0) //top right
+          {
+            Console.WriteLine("Topright");
+            hasSpawned=true;
+            yPos=0;
+            xPos=3;
+          }
+          else if (GameBoard[3, 3] == 0) //bottom right
+          {
+            Console.WriteLine("Bottomright");
+            hasSpawned=true;
+            yPos=3;
+            xPos=3;
+          }
+          else if (GameBoard[3, 0] == 0) //bottom left
+          {
+            Console.WriteLine("bottomleft");
+            hasSpawned=true;
+            yPos=0;
+            xPos=0;
+          }
+
+          if(hasSpawned)
+          {            
+            Console.WriteLine("----------");
+            Console.WriteLine("BEFORE");
+            DisplayBoard();
+            valuetoSpawn= tilespawnPool.Dequeue();
+            tilespawnPool.Enqueue(valuetoSpawn);
+            GameBoard[yPos, xPos]= valuetoSpawn;
+            Console.WriteLine("AFTER");
+            DisplayBoard();
+            Console.WriteLine("----------");
+          }
+          else
+          {
+            Console.WriteLine("spawnfailed");
+
+          }
+        }
+
+
+        //returns success of move
+
+        public bool moveBoard(Direction nDirection)
+        {
+            bool hasMoved = false;
+
+            //if (currentGameState == GameState.eAbout) currentGameState = GameState.eGame;
+
+            switch (nDirection)
+            {
+
+                case Direction.swipeUp:
+                    for (int j = 0; j < 4; j++)  //coloumn selected
+                    {
+                        for (int i = 0; i < 4; i++)
+                        {
+                            for (int k = i + 1; k < 4; k++)
+                            {
+                                //[k,j] is the target being currently looked at
+                                if (GameBoard[k, j] == 0)
+                                {
+                                    continue;
+                                }
+                                else if (GameBoard[k, j] == GameBoard[i, j]) //merge
+                                {
+                                    hasMoved = true;
+                                    GameBoard[i, j] *= 2;
+                                    //iScore += GameBoard[i,j];
+                                    GameBoard[k, j] = 0;
+                                    //bAdd = true;
+                                    break;
+                                }
+                                else
+                                {
+                                    if (GameBoard[i, j] == 0 && GameBoard[k, j] != 0) //Move to new location
+                                    {
+                                        hasMoved = true;
+                                        GameBoard[i, j] = GameBoard[k, j];
+                                        GameBoard[k, j] = 0;
+                                        i--;
+                                        //bAdd = true;
+                                        break;
+                                    }
+                                    else if (GameBoard[i, j] != 0)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case Direction.swipeDown:
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int i = 3; i >= 0; i--)
+                        {
+                            for (int k = i - 1; k >= 0; k--)
+                            {
+                                if (GameBoard[k, j] == 0)
+                                {
+                                    continue;
+                                }
+                                else if (GameBoard[k, j] == GameBoard[i, j])
+                                {
+                                    hasMoved = true;
+                                    GameBoard[i, j] *= 2;
+                                    GameBoard[k, j] = 0;
+                                    break;
+                                }
+                                else
+                                {
+                                    if (GameBoard[i, j] == 0 && GameBoard[k, j] != 0)
+                                    {
+                                        hasMoved = true;
+                                        GameBoard[i, j] = GameBoard[k, j];
+                                        GameBoard[k, j] = 0;
+                                        i++;
+                                        break;
+                                    }
+                                    else if (GameBoard[i, j] != 0)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case Direction.swipeRight:
+                    for (int i = 0; i < 4; i++)
+                    {
+                        for (int j = 3; j >= 0; j--)
+                        {
+                            for (int k = j - 1; k >= 0; k--)
+                            {
+                                if (GameBoard[i, k] == 0)
+                                {
+                                    continue;
+                                }
+                                else if (GameBoard[i, k] == GameBoard[i, j])
+                                {
+                                    hasMoved = true;
+                                    GameBoard[i, j] *= 2;
+                                    GameBoard[i, k] = 0;
+                                    break;
+                                }
+                                else
+                                {
+                                    if (GameBoard[i, j] == 0 && GameBoard[i, k] != 0)
+                                    {
+                                        hasMoved = true;
+                                        GameBoard[i, j] = GameBoard[i, k];
+                                        GameBoard[i, k] = 0;
+                                        j++;
+                                        break;
+                                    }
+                                    else if (GameBoard[i, j] != 0)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    break;
+
+                case Direction.swipeLeft: //moves left
+                    for (int i = 0; i < 4; i++) // moves up
+                    {
+                        for (int j = 0; j < 4; j++)
+                        {
+                            for (int k = j + 1; k < 4; k++)
+                            {
+                                if (GameBoard[i, k] == 0) // move to next cell
+                                {
+                                    continue;
+                                }
+                                else if (GameBoard[i, k] == GameBoard[i, j]) // if same
+                                {
+                                    hasMoved = true;
+                                    GameBoard[i, j] *= 2; //double
+                                    GameBoard[i, k] = 0;
+                                    break;
+                                }
+                                else    //not same, not 0
+                                {
+                                    if (GameBoard[i, j] == 0 && GameBoard[i, k] != 0) //not same
+                                    {
+                                        hasMoved = true;
+                                        GameBoard[i, j] = GameBoard[i, k];
+                                        GameBoard[i, k] = 0;
+                                        j--;
+                                        break;
+                                    }
+                                    else if (GameBoard[i, j] != 0)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    break;
+            }
+            if(hasMoved) //spawn tile
+            {
+              spawn();
+            }
+            return hasMoved;
         }
 
 
     }
 }
-        
-        
+
