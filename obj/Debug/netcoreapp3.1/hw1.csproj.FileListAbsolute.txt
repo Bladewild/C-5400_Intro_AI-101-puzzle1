@@ -1,0 +1,11 @@
+F:\DesktopFolders\School\CS5400 AI\hw1\obj\Debug\netcoreapp3.1\hw1.csprojAssemblyReference.cache
+F:\DesktopFolders\School\CS5400 AI\hw1\obj\Debug\netcoreapp3.1\hw1.AssemblyInfoInputs.cache
+F:\DesktopFolders\School\CS5400 AI\hw1\obj\Debug\netcoreapp3.1\hw1.AssemblyInfo.cs
+F:\DesktopFolders\School\CS5400 AI\hw1\bin\Debug\netcoreapp3.1\hw1.exe
+F:\DesktopFolders\School\CS5400 AI\hw1\bin\Debug\netcoreapp3.1\hw1.deps.json
+F:\DesktopFolders\School\CS5400 AI\hw1\bin\Debug\netcoreapp3.1\hw1.runtimeconfig.json
+F:\DesktopFolders\School\CS5400 AI\hw1\bin\Debug\netcoreapp3.1\hw1.runtimeconfig.dev.json
+F:\DesktopFolders\School\CS5400 AI\hw1\bin\Debug\netcoreapp3.1\hw1.dll
+F:\DesktopFolders\School\CS5400 AI\hw1\bin\Debug\netcoreapp3.1\hw1.pdb
+F:\DesktopFolders\School\CS5400 AI\hw1\obj\Debug\netcoreapp3.1\hw1.dll
+F:\DesktopFolders\School\CS5400 AI\hw1\obj\Debug\netcoreapp3.1\hw1.pdb

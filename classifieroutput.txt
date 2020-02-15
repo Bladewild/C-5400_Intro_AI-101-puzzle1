@@ -1,0 +1,24 @@
+CS-5001: HW#3
+Programmer: Alain Markus P. Santos-Tankia
+
+Using learning rate eta = 0.1
+Using 10000 iterations.
+
+OUPUT:
+Input Units:
+-2.1423259 -2.0553184 0.2153574 
+0.6805382 0.45700064 0.1093685 
+-2.2440994 -1.9685936 0.5723385 
+-2.293178 -1.9428909 0.0508238 
+
+Output Units
+1.2719017
+1.2329649
+1.7402202
+1.1585089
+0.1119919
+
+Validation
+Sum-of-Squares Error = 12
+
+Output made by weights is rounded to 1 or 2
