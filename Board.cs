@@ -158,56 +158,59 @@ namespace hw1
         public void spawn()
         {
           //top left > top right > bottom right > bottom left
-          Console.WriteLine("ATTEMPING TO SPAWN: ");
+          //Console.WriteLine("ATTEMPING TO SPAWN: ");
           bool hasSpawned= false;
           int yPos =-1;
           int xPos =-1;
           int valuetoSpawn;
           if (GameBoard[0, 0] == 0) //top left
           {
-            Console.WriteLine("Topleft");
+            //Console.WriteLine("Topleft");
             hasSpawned=true;
             yPos=0;
             xPos=0;
+            //Console.Write("[" + yPos + "," + xPos + "]");
           }
-          else if (GameBoard[0, 3] == 0) //top right
+          else if (GameBoard[0, coloumn -1] == 0) //top right
           {
-            Console.WriteLine("Topright");
+            //Console.WriteLine("Topright");            
             hasSpawned=true;
             yPos=0;
-            xPos=3;
+            xPos=coloumn -1;
+            //Console.Write("[" + yPos + "," + xPos + "]");
           }
-          else if (GameBoard[3, 3] == 0) //bottom right
+          else if (GameBoard[row-1, coloumn-1] == 0) //bottom right
           {
-            Console.WriteLine("Bottomright");
+            //Console.WriteLine("Bottomright");
             hasSpawned=true;
-            yPos=3;
-            xPos=3;
+            yPos=row-1;
+            xPos=coloumn-1;
+            //Console.Write("[" + yPos + "," + xPos + "]");
           }
-          else if (GameBoard[3, 0] == 0) //bottom left
+          else if (GameBoard[row-1, 0] == 0) //bottom left
           {
-            Console.WriteLine("bottomleft");
+            //Console.WriteLine("bottomleft");
             hasSpawned=true;
-            yPos=0;
+            yPos=row-1;
             xPos=0;
+            //Console.Write("[" + yPos + "," + xPos + "]");
           }
 
           if(hasSpawned)
           {            
-            Console.WriteLine("----------");
-            Console.WriteLine("BEFORE");
-            DisplayBoard();
+            //Console.WriteLine("----------");
+            //Console.WriteLine("BEFORE");
+            //DisplayBoard();
             valuetoSpawn= tilespawnPool.Dequeue();
             tilespawnPool.Enqueue(valuetoSpawn);
             GameBoard[yPos, xPos]= valuetoSpawn;
-            Console.WriteLine("AFTER");
-            DisplayBoard();
-            Console.WriteLine("----------");
+            //Console.WriteLine("AFTER");
+            //DisplayBoard();
+            //Console.WriteLine("----------");
           }
           else
           {
             Console.WriteLine("spawnfailed");
-
           }
         }
 
@@ -218,17 +221,16 @@ namespace hw1
         {
             bool hasMoved = false;
 
-            //if (currentGameState == GameState.eAbout) currentGameState = GameState.eGame;
 
             switch (nDirection)
             {
 
                 case Direction.swipeUp:
-                    for (int j = 0; j < 4; j++)  //coloumn selected
+                    for (int j = 0; j < coloumn; j++)  //coloumn selected
                     {
-                        for (int i = 0; i < 4; i++)
+                        for (int i = 0; i < row; i++)
                         {
-                            for (int k = i + 1; k < 4; k++)
+                            for (int k = i + 1; k < row; k++)
                             {
                                 //[k,j] is the target being currently looked at
                                 if (GameBoard[k, j] == 0)
@@ -265,9 +267,9 @@ namespace hw1
                     }
                     break;
                 case Direction.swipeDown:
-                    for (int j = 0; j < 4; j++)
+                    for (int j = 0; j < coloumn; j++)
                     {
-                        for (int i = 3; i >= 0; i--)
+                        for (int i = row-1; i >= 0; i--)
                         {
                             for (int k = i - 1; k >= 0; k--)
                             {
@@ -302,9 +304,9 @@ namespace hw1
                     }
                     break;
                 case Direction.swipeRight:
-                    for (int i = 0; i < 4; i++)
+                    for (int i = 0; i < row; i++)
                     {
-                        for (int j = 3; j >= 0; j--)
+                        for (int j = coloumn-1; j >= 0; j--)
                         {
                             for (int k = j - 1; k >= 0; k--)
                             {
@@ -340,11 +342,11 @@ namespace hw1
                     break;
 
                 case Direction.swipeLeft: //moves left
-                    for (int i = 0; i < 4; i++) // moves up
+                    for (int i = 0; i < row; i++) // moves up
                     {
-                        for (int j = 0; j < 4; j++)
+                        for (int j = 0; j < coloumn; j++)
                         {
-                            for (int k = j + 1; k < 4; k++)
+                            for (int k = j + 1; k < coloumn; k++)
                             {
                                 if (GameBoard[i, k] == 0) // move to next cell
                                 {

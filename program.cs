@@ -31,6 +31,7 @@ namespace hw1
             Puzzle_Board.DisplayBoard();
             Puzzle_Board.DebugBoard();
             //LDL
+            
             Console.WriteLine("swipeLeft");
             moved = Puzzle_Board.moveBoard(Direction.swipeLeft); 
             Console.WriteLine("Has Moved: "+moved);
@@ -45,7 +46,7 @@ namespace hw1
             moved = Puzzle_Board.moveBoard(Direction.swipeLeft); 
             Console.WriteLine("Has Moved: "+moved);
             Puzzle_Board.DisplayBoard();            
-
+            
             /* test non movement
             Console.WriteLine("swipeUp");
             moved = Puzzle_Board.moveBoard(Direction.swipeUp); 
@@ -59,7 +60,8 @@ namespace hw1
             Puzzle_Board.DisplayBoard();
             */
 
-            /* test up down left right
+            //test up down left right
+            /*
             Console.WriteLine("swipeRight");
             moved = Puzzle_Board.moveBoard(Direction.swipeRight); 
             Console.WriteLine("Has Moved: "+moved);
